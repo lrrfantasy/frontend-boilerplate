@@ -1,11 +1,10 @@
-var rucksack = require('rucksack-css')
 var webpack = require('webpack')
 var path = require('path')
 
-module.exports = {
-  context: path.join(__dirname, './client'),
+var config = {
+  context: path.join(__dirname, './src'),
   entry: {
-    jsx: './index.js',
+    jsx: './index.jsx',
     html: './index.html',
     vendor: [
       'react',
@@ -19,6 +18,7 @@ module.exports = {
   output: {
     path: path.join(__dirname, './static'),
     filename: 'bundle.js',
+    publicPath: '/'
   },
   module: {
     loaders: [
@@ -27,18 +27,18 @@ module.exports = {
         loader: 'file?name=[name].[ext]'
       },
       {
-        test: /\.css$/,
-        include: /client/,
+        test: /\.(css|scss)$/,
+        include: /src/,
         loaders: [
           'style-loader',
-          'css-loader?modules&sourceMap&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]',
-          'postcss-loader'
+          'css-loader?&modules&importLoaders=1&localIdentName=[local]___[hash:base64:5]',
+          'sass-loader'
         ]
       },
       {
-        test: /\.css$/,
-        exclude: /client/,
-        loader: 'style!css'
+        test: /\.(css|scss)$/,
+        exclude: /src/,
+        loader: 'style!css!sass-loader'
       },
       {
         test: /\.(js|jsx)$/,
@@ -48,16 +48,22 @@ module.exports = {
           'babel-loader'
         ]
       },
+      {
+        test: /\.(png|jpg)$/,
+        loaders: [
+          'file?name=[path][name].[ext]'
+        ]
+      },
+      { test: /\.woff(\?.*)?$/,  loader: "url-loader?prefix=fonts/&name=[path][name].[ext]&limit=10000&mimetype=application/font-woff" },
+      { test: /\.woff2(\?.*)?$/, loader: "url-loader?prefix=fonts/&name=[path][name].[ext]&limit=10000&mimetype=application/font-woff2" },
+      { test: /\.ttf(\?.*)?$/,   loader: "url-loader?prefix=fonts/&name=[path][name].[ext]&limit=10000&mimetype=application/octet-stream" },
+      { test: /\.eot(\?.*)?$/,   loader: "file-loader?prefix=fonts/&name=[path][name].[ext]" },
+      { test: /\.svg(\?.*)?$/,   loader: "url-loader?prefix=fonts/&name=[path][name].[ext]&limit=10000&mimetype=image/svg+xml" }
     ],
   },
   resolve: {
     extensions: ['', '.js', '.jsx']
   },
-  postcss: [
-    rucksack({
-      autoprefixer: true
-    })
-  ],
   plugins: [
     new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.bundle.js'),
     new webpack.DefinePlugin({
@@ -65,7 +71,18 @@ module.exports = {
     })
   ],
   devServer: {
-    contentBase: './client',
+    contentBase: './src',
     hot: true
   }
 }
+
+if (process.env.NODE_ENV === 'production') {
+  config.plugins.push(new webpack.optimize.UglifyJsPlugin({
+    compress: {
+      warnings: false
+    },
+    sourceMap: false
+  }))
+}
+
+module.exports = config
