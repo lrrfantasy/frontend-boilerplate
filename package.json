@@ -21,7 +21,6 @@
     "css-loader": "^0.23.1",
     "file-loader": "^0.8.5",
     "style-loader": "^0.13.0",
-    "sass-loader": "^3.2.0",
     "url-loader": "^0.5.7",
     "webpack": "^1.12.14",
     "webpack-dev-server": "^1.14.1",
@@ -37,6 +36,8 @@
     "redux": "^3.3.1",
     "redux-actions": "^0.9.1",
     "redux-promise": "^0.5.3",
+    "stylus": "^0.54.5",
+    "stylus-loader": "^2.3.1",
     "history": "^2.1.1"
   }
 }
