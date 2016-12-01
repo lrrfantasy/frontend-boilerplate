@@ -1,5 +1,6 @@
 var webpack = require('webpack')
 var path = require('path')
+var DashboardPlugin = require('webpack-dashboard/plugin')
 
 var config = {
   context: path.join(__dirname, './src'),
@@ -83,6 +84,8 @@ if (process.env.NODE_ENV === 'production') {
     },
     sourceMap: false
   }))
+} else {
+  config.plugins.push(new DashboardPlugin())
 }
 
 module.exports = config
