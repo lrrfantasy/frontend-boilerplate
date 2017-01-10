@@ -4,7 +4,7 @@ import * as TodoActions from '../../actions/todos'
 
 import style from './style.css'
 
-@connect(mapStateToProps, TodoActions)
+@connect(() => ({}), TodoActions)
 export default class App extends Component {
   render() {
     return (
