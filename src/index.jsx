@@ -8,6 +8,8 @@ import React from 'react'
 import App from './containers/App'
 import configure from './store'
 
+import './styles/main.styl'
+
 const store = configure(undefined, process.env)
 
 const hashHistory = useRouterHistory(createHashHistory)({ queryKey: false })
